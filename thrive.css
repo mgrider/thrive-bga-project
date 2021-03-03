@@ -1,0 +1,184 @@
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * thrive implementation : © Philippe Dubrulle p.dubrulle@gmail.com
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * thrive.css
+ *
+ * thrive stylesheet
+ *
+ */
+
+/*
+    This is the CSS stylesheet of your game User Interface.
+    
+    Styles defined on this file will be applied to the HTML elements you define in your
+    HTML template (thrive_thrive.tpl), and to HTML elements you create dynamically
+    (in thrive.js).
+    
+    Usually, you are using CSS to:
+    
+    1°) define the overall layout of your game
+        (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
+
+    2°) create your CSS-sprites:
+        All images of your games should be gathered into a small number of image files. Then, using
+        background-image and background-position CSS properties, you create HTML blocks that can 
+        display these images correctly (see example below).
+    
+    3°) ... anything else:
+        It is really easy to add and remove CSS classes dynamically from your Javascript with
+        dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
+        (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
+        very often, using CSS classes for the logic of your user interface allow you to do complex
+        thing easily.
+        
+        
+     Note: on the production platform, this file will be compressed and comments will be removed.
+           Consequently, don't hesitate to put as many comments as necessary.
+*/
+
+
+/* Note: you must not use any @import directive */
+
+
+/********* You can start writing your CSS below this line: **********/
+
+
+/*
+    Example of CSS sprites (a black token and a white token, 20x20px each, embedded in the same "tokens.png" 40x20px image):
+
+    .white_token {
+        background-image: url('img/tokens.png');
+        background-position: 0px 0px;
+    }
+    .black_token {
+        background-image: url('img/tokens.png');
+        background-position: -20px 0px;
+    }
+    .token {
+        width: 20px;
+        height: 20px;
+        background-repeat: none;
+    }
+*/
+
+#game_play_area {
+	text-align: center;
+}
+
+.rotated {
+	transform:rotate(180deg);
+}
+
+#board {
+   width: 600px;
+   height: 600px;
+   display: inline-block;
+   background-image: url('img/ThriveBoard_600x600.png');
+}
+
+#div-square {
+	position: relative;
+}
+
+#pieces {
+	position: relative;
+
+}
+#div-peg-placement {
+	position: relative;
+}
+
+.square {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+	z-index: 0;
+}
+
+.square_clickable {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+	z-index: 1;
+}
+
+.piece {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    background-image: url('img/pieces.png');
+}
+.piececolor_4fb0bd { background-position: 0px 0px;   }
+.piececolor_ffffff { background-position: -64px 0px;   }
+
+.peg_placement {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+	z-index: 2;
+}
+
+.possible_peg_placement {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+	z-index: 2;
+	background-color: grey;
+	cursor: pointer;
+}
+
+.piece_4fb0bd_for_peg_placement {
+    width: 128px;
+    height: 128px;
+	left: 237px;
+	top: 237px;
+    position: relative;
+    background-image: url('img/pieces_for_peg.png');
+	background-position: 0px 0px;
+}
+
+.piece_ffffff_for_peg_placement {
+    width: 128px;
+    height: 128px;
+	left: 237px;
+	top: 237px;
+    position: relative;
+    background-image: url('img/pieces_for_peg.png');
+	background-position: -128px 0px;
+}
+
+.possiblePieceToMove {
+	background-color: green;
+	cursor: pointer;
+}
+
+.possibleMove {
+	background-color: green;
+	opacity: 0.4;
+	filter: alpha(opacity=40); /* for IE8 and earlier */
+	cursor: pointer;
+}
+
+.selectedPiece {
+	border: solid;
+	border-width: 4px;
+	border-color: green;
+}
+
+.peg {
+    width: 6px;
+    height: 6px;
+    position: absolute;
+    background-image: url('img/peg.png');
+}
+
+.possiblePeg {
+	background-color: green;
+	cursor: pointer;
+}
