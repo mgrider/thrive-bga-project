@@ -1,5 +1,7 @@
 on: push
 name: Publish Thrive to BGA
+branches:
+  - main
 jobs:
   FTP-Deploy-Action:
     name: FTP-Deploy-Action
