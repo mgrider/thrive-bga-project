@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '!.github'
 name: Publish Thrive to BGA
 jobs:
   FTP-Deploy-Action:
