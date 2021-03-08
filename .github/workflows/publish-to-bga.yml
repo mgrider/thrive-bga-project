@@ -2,8 +2,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '!.github'
 name: Publish Thrive to BGA
 jobs:
   FTP-Deploy-Action:
@@ -21,3 +19,5 @@ jobs:
           ftp-username: ${{ secrets.BGA_USERNAME }}
           ftp-password: ${{ secrets.BGA_FTP_PASSWORD }}
           git-ftp-args: --insecure # if your certificate is setup correctly this can be removed (see known-hosts argument)
+          exclude:
+            - .github
