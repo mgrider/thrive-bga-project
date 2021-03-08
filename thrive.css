@@ -91,7 +91,8 @@
 
 }
 #div-peg-placement {
-	position: relative;
+    position: relative;
+    display: none;
 }
 
 .square {
@@ -118,18 +119,19 @@
 .piececolor_ffffff { background-position: -64px 0px;   }
 
 .peg_placement {
-    width: 8px;
-    height: 8px;
+    background-color: limegreen;
+    border-radius: 100%;
+    width: 12px;
+    height: 12px;
     position: absolute;
 	z-index: 2;
 }
 
 .possible_peg_placement {
-    width: 8px;
-    height: 8px;
+    background-color: transparent;
+    border: 1px solid white;
     position: absolute;
 	z-index: 2;
-	background-color: grey;
 	cursor: pointer;
 }
 
@@ -182,3 +184,4 @@
 	background-color: green;
 	cursor: pointer;
 }
+
