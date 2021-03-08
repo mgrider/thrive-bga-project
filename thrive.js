@@ -364,6 +364,7 @@ function (dojo, declare) {
 		},
 
 		updatePossiblePegs: function ( possiblePegs, player ) {
+			dojo.style( "div-peg-placement", "display", "block" );
 			dojo.query( '#piece_for_peg_placement' ).addClass( 'piece_' + this.gamedatas.players[ player ].color + '_for_peg_placement' );
 			for ( var peg in possiblePegs ) {
 				dojo.query( '#peg_placement_' + peg ).addClass( 'possible_peg_placement' );
@@ -372,6 +373,7 @@ function (dojo, declare) {
 		
 		cleanPossiblePegs: function( ) {
 			// Remove current possible peg placements
+			dojo.style( "div-peg-placement", "display", "none" );
 			for ( var playr in this.gamedatas.players )
 				dojo.query( '#piece_for_peg_placement' ).removeClass( 'piece_' + this.gamedatas.players[ playr ].color + '_for_peg_placement' );
 			dojo.query( '.possible_peg_placement' ).removeClass( 'possible_peg_placement' );
