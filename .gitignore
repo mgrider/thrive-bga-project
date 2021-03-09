@@ -1,1 +1,6 @@
+# Composer assets
 vendor/
+
+# BGA Workbench files
+bgaproject.yml
+dist/
