@@ -63,9 +63,10 @@ function (dojo, declare) {
 				// TODO: Setting up players boards if needed
             }
 */
+			this.idOfFirstPlayer = Object.keys(gamedatas.players)[0].id;
 
             // TODO: Set up your game interface here, according to "gamedatas"
-            
+
 			for( var i in gamedatas.pieces ) {
 				var piece = gamedatas.pieces[ i ];
 				if ( piece.alive == 1 ) {
@@ -681,14 +682,16 @@ dump: function(obj) {
 		},
 
 		notif_selectedMoveLocation: function( notif ) {
-			// turn game board for first player (so that his pieces be at the bottom and move upwards)
-			if (this.player_id == this.idOfFirstPlayer )
-				dojo.query( '#game_play_area' ).removeClass("rotated");
+			// Turn game board for second player so that their pieces be at the bottom and move upwards.
+			if (this.player_id != this.idOfFirstPlayer) {
+				dojo.query('#game_play_area').removeClass("rotated");
+			}
 
 			this.slideToObject( 'piece_' + this.idOfSelectedPiece, 'square_' + notif.args.x + '_' + notif.args.y ).play();
 
-			if (this.player_id == this.idOfFirstPlayer )
-				dojo.query( '#game_play_area' ).addClass("rotated");
+			if (this.player_id != this.idOfFirstPlayer) {
+				dojo.query('#game_play_area').addClass("rotated");
+			}
 
 			this.xOfSelectedPiece = -1;
 			this.yOfSelectedPiece = -1;
@@ -697,7 +700,7 @@ dump: function(obj) {
 			dojo.query( '.possibleMove' ).removeClass( 'possibleMove' );
 			dojo.query( '.selectedPiece' ).removeClass( 'selectedPiece' );
 		},
-		
+
 		notif_cancelPieceSelection: function( notif ) {
 			dojo.query( '.pegPlacement' ).removeClass( 'pegPlacement' );
 			dojo.query( '.possibleMove' ).removeClass( 'possibleMove' );
@@ -709,14 +712,16 @@ dump: function(obj) {
 		},
 
 		notif_selectedPegLocation: function( notif ) {
-			if (this.player_id == this.idOfFirstPlayer )
-				dojo.query( '#game_play_area' ).removeClass("rotated");
+			if (this.player_id != this.idOfFirstPlayer) {
+				dojo.query('#game_play_area').removeClass("rotated");
+			}
 
 			this.addPegOnPiece( notif.args.piece_id, notif.args.peg_index );
 			dojo.query( '.pegPlacement' ).removeClass( 'pegPlacement' );
 
-			if (this.player_id == this.idOfFirstPlayer )
-				dojo.query( '#game_play_area' ).addClass("rotated");
+			if (this.player_id != this.idOfFirstPlayer) {
+				dojo.query('#game_play_area').addClass("rotated");
+			}
 
 			this.xOfSelectedPiece = -1;
 			this.yOfSelectedPiece = -1;
