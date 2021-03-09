@@ -94,15 +94,11 @@ function (dojo, declare) {
 				dojo.query( '.peg_placement' ).connect( 'onclick', this, 'onSelectedWhereToPlacePeg' );
 //			}
 
-			// turn game board for first player (so that his pieces be at the bottom and move upwards)
-			for( var player_id in gamedatas.players ) {
-				this.idOfFirstPlayer = player_id;
-				break;
+			if (this.player_id != this.idOfFirstPlayer) {
+				dojo.query('#game_play_area').addClass("rotated");
 			}
-			if (this.player_id == this.idOfFirstPlayer )
-				dojo.query( '#game_play_area' ).addClass("rotated");
-
-            console.log( "Ending game setup" );
+	
+			console.log( "Ending game setup" );
         },
 
         ///////////////////////////////////////////////////
