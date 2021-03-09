@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "dholmes/bga-workbench": "^0.1.6"
+    }
+}
