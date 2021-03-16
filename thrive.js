@@ -63,7 +63,7 @@ function (dojo, declare) {
 				// TODO: Setting up players boards if needed
             }
 */
-			this.idOfFirstPlayer = Object.keys(gamedatas.players)[0].id;
+			this.idOfFirstPlayer = Object.keys(gamedatas.players)[0];
 
             // TODO: Set up your game interface here, according to "gamedatas"
 
