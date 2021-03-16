@@ -156,8 +156,14 @@
 }
 
 .possiblePieceToMove {
-	background-color: green;
-	cursor: pointer;
+    cursor: pointer;
+}
+
+.possiblePieceToMove,
+.selectedPiece {
+    background-color: green;
+    border: 4px solid green;
+    border-radius: 20%;
 }
 
 .possibleMove {
@@ -165,12 +171,6 @@
 	opacity: 0.4;
 	filter: alpha(opacity=40); /* for IE8 and earlier */
 	cursor: pointer;
-}
-
-.selectedPiece {
-	border: solid;
-	border-width: 4px;
-	border-color: green;
 }
 
 .peg {
