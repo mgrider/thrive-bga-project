@@ -139,6 +139,16 @@
 	cursor: pointer;
     animation: pulsePegPlacement 1s infinite alternate;
 }
+@keyframes pulsePegPlacement {
+    0%{
+        box-shadow:0 0 1px #fff;
+        border: 1px solid white;
+    }
+    to{
+        box-shadow:0 0 1px 1px #0885c3;
+        border: 1px solid #0885c3;
+    }
+}
 
 .piece_4fb0bd_for_peg_placement {
     width: 128px;
@@ -178,9 +188,19 @@
 
 .possibleMove {
 	background-color: green;
+    border-radius: 20%;
 	opacity: 0.4;
 	filter: alpha(opacity=40); /* for IE8 and earlier */
 	cursor: pointer;
+    animation: pulsePossibleMove 1s infinite alternate;
+}
+@keyframes pulsePossibleMove {
+    0%{
+        box-shadow:0 0 1px #0ff
+    }
+    to{
+        box-shadow:0 0 2px 3px #0885c3
+    }
 }
 
 .peg {
@@ -208,12 +228,4 @@
     }
 }
 
-@keyframes pulsePegPlacement {
-    0%{
-        box-shadow:0 0 1px #fff
-    }
-    to{
-        box-shadow:0 0 1px 1px #0885c3
-    }
-}
 
