@@ -256,25 +256,27 @@ function (dojo, declare) {
 				case 'playerTurnSelectPegLocationForPeg2Add':
 					this.addActionButton('button_cancelSelection', _('Unselect'), 'onCancelPieceSelection');
 					break;
-				case 'playerTurnSelectPieceToMove':
-					this.addActionButton('button_cancelMove', _('No move'), 'onPassMovePiece');
+					case 'playerTurnSelectPieceToMove':
+					// @TODO No move is allowed only if there are no available moves. Implement!
+					// this.addActionButton('button_cancelMove', _('No move'), 'onPassMovePiece');
 					break;
 				case 'playerTurnSelectPieceForPeg1Add':
-				case 'playerTurnSelectPieceForPeg2Add':
-					this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
+					case 'playerTurnSelectPieceForPeg2Add':
+					// @TODO Skip to next player automatically if there are no peg placement spaces available.
+					// this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
 					break;
                 }
             }
-        },        
+        },
 
         ///////////////////////////////////////////////////
         //// Utility methods
-        
+
         /*
-        
+
             Here, you can defines some utility methods that you can use everywhere in your javascript
             script.
-        
+
         */
 
 		addPieceOnBoard: function( id, x, y, player ) {
