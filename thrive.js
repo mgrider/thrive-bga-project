@@ -10,7 +10,7 @@
  * thrive.js
  *
  * thrive user interface script
- * 
+ *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
@@ -24,36 +24,36 @@ function (dojo, declare) {
     return declare("bgagame.thrive", ebg.core.gamegui, {
         constructor: function(){
             console.log('thrive constructor');
-              
+
             // Here, you can init the global variables of your user interface
             // Example:
             // this.myGlobalValue = 0;
-			
+
 			this.xOfSelectedPiece = -1;
 			this.yOfSelectedPiece = -1;
 			this.idOfSelectedPiece = -1;
-			
+
 			this.idOfFirstPlayer = -1;
 
         },
-        
+
         /*
             setup:
-            
+
             This method must set up the game user interface according to current game situation specified
             in parameters.
-            
+
             The method is called each time the game interface is displayed to a player, ie:
             _ when the game starts
             _ when a player refreshes the game page (F5)
-            
+
             "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
         */
-        
+
         setup: function( gamedatas )
         {
             console.log( "Starting game setup" );
-            
+
             // Setting up player boards
 /*
             for( var player_id in gamedatas.players )
@@ -97,30 +97,30 @@ function (dojo, declare) {
 			if (this.player_id != this.idOfFirstPlayer) {
 				dojo.query('#game_play_area').addClass("rotated");
 			}
-	
+
 			console.log( "Ending game setup" );
         },
 
         ///////////////////////////////////////////////////
         //// Game & client states
-        
+
         // onEnteringState: this method is called each time we are entering into a new game state.
         //                  You can use this method to perform some user interface changes at this moment.
         //
         onEnteringState: function( stateName, args )
         {
             console.log( 'Entering state: '+stateName );
-            
+
             switch( stateName )
             {
-            
+
             /* Example:
-            
+
             case 'myGameState':
-            
+
                 // Show some HTML block at this game state
                 dojo.style( 'my_html_block_id', 'display', 'block' );
-                
+
                 break;
            */
 			case 'playerTurnSelectPieceToMove':
@@ -129,27 +129,27 @@ function (dojo, declare) {
 					this.cleanPossibleMoves( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectLocationToMove':
 				if ( this.isCurrentPlayerActive() ) {
 					this.updatePossibleMoves( args.args.possibleMoves );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPieceForPeg1Add':
 				if ( this.isCurrentPlayerActive() ) {
 					this.updatePossiblePiecesToMove( args.args.playerPieces );
 					this.cleanPossiblePegs( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPegLocationForPeg1Add':
 				if ( this.isCurrentPlayerActive() ) {
-					
+
 					this.updatePossiblePegs( args.args.possiblePegs, args.args.player );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPieceForPeg2Add':
 				if ( this.isCurrentPlayerActive() ) {
 					this.updatePossiblePiecesToMove( args.args.playerPieces );
@@ -162,7 +162,7 @@ function (dojo, declare) {
 					this.updatePossiblePegs( args.args.possiblePegs, args.args.player );
 				}
 				break;
-			
+
             case 'dummmy':
                 break;
             }
@@ -174,17 +174,17 @@ function (dojo, declare) {
         onLeavingState: function( stateName )
         {
             console.log( 'Leaving state: '+stateName );
-            
+
             switch( stateName )
             {
-            
+
             /* Example:
-            
+
             case 'myGameState':
-            
+
                 // Hide the HTML block we are displaying only during this game state
                 dojo.style( 'my_html_block_id', 'display', 'none' );
-                
+
                 break;
            */
 			case 'playerTurnSelectPieceToMove':
@@ -192,25 +192,25 @@ function (dojo, declare) {
 					this.cleanPossiblePiecesToMove( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectLocationToMove':
 				if ( this.isCurrentPlayerActive() ) {
 					this.cleanPossibleMoves( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPieceForPeg1Add':
 				if ( this.isCurrentPlayerActive() ) {
 					this.cleanPossiblePiecesToMove( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPegLocationForPeg1Add':
 				if ( this.isCurrentPlayerActive() ) {
 					this.cleanPossiblePegs( );
 				}
 				break;
-			
+
 			case 'playerTurnSelectPieceForPeg2Add':
 				if ( this.isCurrentPlayerActive() ) {
 					this.cleanPossiblePiecesToMove( );
@@ -222,33 +222,33 @@ function (dojo, declare) {
 					this.cleanPossiblePegs( );
 				}
 				break;
-			
+
             case 'dummmy':
                 break;
-            }               
-        }, 
+            }
+        },
 
         // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
         //                        action status bar (ie: the HTML links in the status bar).
-        //        
+        //
         onUpdateActionButtons: function( stateName, args )
         {
             console.log( 'onUpdateActionButtons: '+stateName );
-                      
+
             if( this.isCurrentPlayerActive() )
-            {            
+            {
                 switch( stateName )
                 {
-/*               
+/*
                  Example:
- 
+
                  case 'myGameState':
-                    
+
                     // Add 3 action buttons in the action status bar:
-                    
-                    this.addActionButton( 'button_1_id', _('Button 1 label'), 'onMyMethodToCall1' ); 
-                    this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' ); 
-                    this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' ); 
+
+                    this.addActionButton( 'button_1_id', _('Button 1 label'), 'onMyMethodToCall1' );
+                    this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' );
+                    this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' );
                     break;
 */
 				case 'playerTurnSelectLocationToMove':
@@ -284,11 +284,11 @@ function (dojo, declare) {
 				id: id,
 				color: this.gamedatas.players[ player ].color
 			} ) , 'pieces' );
-			
+
 			this.placeOnObject( 'piece_' + id, 'overall_player_board_' + player );
 			this.slideToObject( 'piece_' + id, 'square_' + x + '_' + y ).play();
 		},
-		
+
 		addPegOnPiece: function( piece_id, peg_index ) {
 			dojo.place( this.format_block( 'jstpl_peg', {
 				id: piece_id + "_" + peg_index
@@ -328,7 +328,7 @@ function (dojo, declare) {
 			posy = Math.round( y * ver_scale );
 			this.placeOnObjectPos( 'peg_' + piece_id + "_" + peg_index, 'piece_' + piece_id, posx, posy );
 		},
-		
+
 		updatePossiblePiecesToMove: function( playerPieces ) {
 			dojo.query( '.square_clickable' ).removeClass( 'square_clickable' ).addClass('square');
 			for( var id in playerPieces ) {
@@ -338,16 +338,16 @@ function (dojo, declare) {
 				dojo.addClass( 'piece_' + id, 'possiblePieceToMove' );
 			}
 		},
-		
+
 		cleanPossiblePiecesToMove: function( ) {
 			// Remove current selected pieces
             console.log( 'function cleanPossiblePiecesToMove called' );
 			dojo.query( '.possiblePieceToMove' ).removeClass( 'possiblePieceToMove' );
 		},
-		
+
 		updatePossibleMoves: function( possibleMoves ) {
 			dojo.query( '.square' ).addClass( 'square_clickable' ).removeClass('square');
-			
+
 			for( var x in possibleMoves ) {
 				for( var y in possibleMoves[ x ] ) {
 					// x,y is a possible move
@@ -355,7 +355,7 @@ function (dojo, declare) {
 				}
 			}
 		},
-		
+
 		cleanPossibleMoves: function( ) {
 			// Remove current possible moves
             console.log( 'function cleanPossibleMoves called' );
@@ -369,7 +369,7 @@ function (dojo, declare) {
 				dojo.query( '#peg_placement_' + peg ).addClass( 'possible_peg_placement' );
 			}
 		},
-		
+
 		cleanPossiblePegs: function( ) {
 			// Remove current possible peg placements
 			dojo.style( "div-peg-placement", "display", "none" );
@@ -381,24 +381,24 @@ function (dojo, declare) {
 
         ///////////////////////////////////////////////////
         //// Player's action
-        
+
         /*
-        
-            Here, you are defining methods to handle player's action (ex: results of mouse click on 
+
+            Here, you are defining methods to handle player's action (ex: results of mouse click on
             game objects).
-            
+
             Most of the time, these methods:
             _ check the action is possible at this game state.
             _ make a call to the game server
-        
+
         */
-        
+
         /* Example:
-        
+
         onMyMethodToCall1: function( evt )
         {
             console.log( 'onMyMethodToCall1' );
-            
+
             // Preventing default browser reaction
             dojo.stopEvent( evt );
 
@@ -406,27 +406,27 @@ function (dojo, declare) {
             if( ! this.checkAction( 'myAction' ) )
             {   return; }
 
-            this.ajaxcall( "/thrive/thrive/myAction.html", { 
-                                                                    lock: true, 
-                                                                    myArgument1: arg1, 
+            this.ajaxcall( "/thrive/thrive/myAction.html", {
+                                                                    lock: true,
+                                                                    myArgument1: arg1,
                                                                     myArgument2: arg2,
                                                                     ...
-                                                                 }, 
+                                                                 },
                          this, function( result ) {
-                            
+
                             // What to do after the server call if it succeeded
                             // (most of the time: nothing)
-                            
+
                          }, function( is_error) {
 
                             // What to do after the server call in anyway (success or failure)
                             // (most of the time: nothing)
 
-                         } );        
-        },        
-        
+                         } );
+        },
+
         */
-		
+
 		onSelectedPieceToMove: function( evt ) {
 			var currentAction;
 			var action;
@@ -442,7 +442,7 @@ function (dojo, declare) {
 				currentAction = 'selectPieceForPeg2';
 				action = 'placing peg 2';
 			} else return; // check that this action is possible at this moment
-			
+
 			console.log( 'function onSelectedPieceToMove called (for ' + action + ')' );
 
 			// Stop this event propagation
@@ -475,14 +475,14 @@ function (dojo, declare) {
 									check: "selectPieceForPeg2"
 								}, this, function( result ) { }, );
 		},
-		
+
 		onCancelPieceSelection: function( evt ) {
 			if( this.checkAction( 'selectMoveLocation', false ) || this.checkAction( 'selectPeg1Location', false ) || this.checkAction( 'selectPeg2Location', false ) ) { // check that this action is possible at this moment
 				console.log( 'function onCancelPieceSelection called' );
 
 				// Stop this event propagation
 				dojo.stopEvent( evt );
-			
+
 				// unselect piece
 				this.idOfSelectedPiece = -1;
 //				this.cleanPossiblePiecesToMove( );
@@ -507,7 +507,7 @@ function (dojo, declare) {
 
 			// Stop this event propagation
 			dojo.stopEvent( evt );
-			
+
 			// Get the cliqued square (X and Y) or piece (ID)
 			// Note: square id format is "square_X_Y"
 			// Note: piece id format is "piece_ID"
@@ -520,16 +520,16 @@ function (dojo, declare) {
 				console.log( 'Impossible move' );
 				return;
 			}
-			
+
 			if( this.checkAction( 'selectMoveLocation' ) ) { // check that this action is possible at this moment
 				this.ajaxcall( "/thrive/thrive/selectMoveLocation.html", {
-									x: x, 
+									x: x,
 									y: y
 								}, this, function( result ) { }, );
 			}
-			
+
 		},
-		
+
 		onPassMovePiece: function( evt ) {
 			if( this.checkAction( 'selectPieceToMove' ) ) { // check that this action is possible at this moment
 				console.log( 'function onPassMovePiece called' );
@@ -544,13 +544,13 @@ function (dojo, declare) {
 								}, this, function( result ) { }, );
 			}
 		},
-		
+
 		onSelectedWhereToPlacePeg: function( evt ) {
 			console.log( 'function onSelectedWhereToPlacePeg called' );
 
 			// Stop this event propagation
 			dojo.stopEvent( evt );
-			
+
 			// Get the clicked peg_placement (peg_index)
 			// Note: peg_index is between 0 and 24
 			var coords = evt.currentTarget.id.split('_');
@@ -562,7 +562,7 @@ function (dojo, declare) {
 				console.log( 'Impossible move' );
 				return;
 			}
-			
+
 			if( this.checkAction( 'selectPeg1Location', false ) ) { // check that this action is possible at this moment
 				this.ajaxcall( "/thrive/thrive/selectPegLocation.html", {
 									peg_index: peg_index,
@@ -574,16 +574,16 @@ function (dojo, declare) {
 									check: "selectPeg2Location"
 								}, this, function( result ) { }, );
 			}
-			
+
 		},
-		
+
 		onPassPlacePeg: function( evt ) {
 			if( this.checkAction( 'selectPieceForPeg1', false ) || this.checkAction( 'selectPieceForPeg2', false ) ) { // check that this action is possible at this moment
 				console.log( 'function onPassPlacePeg called' );
 
 				// Stop this event propagation
 				dojo.stopEvent( evt );
-			
+
 				// unselect piece
 				this.idOfSelectedPiece = -1;
 //				this.cleanPossiblePiecesToMove( );
@@ -600,29 +600,29 @@ function (dojo, declare) {
 								}, this, function( result ) { }, );
 			}
 		},
-		
-		
+
+
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications
 
         /*
             setupNotifications:
-            
+
             In this method, you associate each of your game notifications with your local method to handle it.
-            
+
             Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
                   your thrive.game.php file.
-        
+
         */
         setupNotifications: function()
         {
             console.log( 'notifications subscriptions setup' );
-            
+
             // TODO: here, associate your game notifications with local methods
-            
+
             // Example 1: standard notification handling
             // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            
+
             // Example 2: standard notification handling + tell the user interface to wait
             //            during 3 seconds after calling the method in order to let the players
             //            see what is happening in the game.
@@ -635,23 +635,23 @@ function (dojo, declare) {
 			this.notifqueue.setSynchronous( 'selectedMoveLocation', 2000 );
 			dojo.subscribe( 'capturedPiece', this, "notif_capturedPiece" );
 			dojo.subscribe( 'selectedPegLocation', this, "notif_selectedPegLocation" );
-        },  
+        },
 
         // TODO: from this point and below, you can write your game notifications handling methods
-        
+
         /*
         Example:
-        
+
         notif_cardPlayed: function( notif )
         {
             console.log( 'notif_cardPlayed' );
             console.log( notif );
-            
+
             // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
-            
+
             // TODO: play the card in the user interface.
-        },    
-        
+        },
+
         */
 /*
 dump: function(obj) {
