@@ -554,19 +554,28 @@ class thrive extends Table
         Here, you can create methods defined as "game state actions" (see "action" property in states.inc.php).
         The action method of state X is called everytime the current game state is set to X.
     */
-    
+
     /*
-    
+
     Example for game state "MyGameState":
 
     function stMyGameState()
     {
         // Do some stuff ...
-        
+
         // (very often) go to another gamestate
         $this->gamestate->nextState( 'some_gamestate_transition' );
-    }    
+    }
     */
+
+    public function stTurnStart()
+    {
+        self::trace('stTurnStart');
+
+        $this->undoSavePoint();
+
+        $this->gamestate->nextState();
+    }
 
 	function stTurnEnd()
     {
@@ -575,7 +584,17 @@ class thrive extends Table
         $player_id = self::activeNextPlayer();
         // (very often) go to another gamestate
         $this->gamestate->nextState( 'nextPlayer' );
-    } 
+    }
+
+    public function playerTurnUndo() {
+        self::checkAction('playerTurnUndo');
+        $this->undoRestorePoint();
+    }
+
+    public function playerTurnConfirmEnd() {
+        self::checkAction('playerTurnConfirmEnd');
+        $this->gamestate->nextState('turnEnd');
+    }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Zombie
