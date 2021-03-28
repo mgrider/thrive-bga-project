@@ -265,9 +265,21 @@ function (dojo, declare) {
 					// @TODO Skip to next player automatically if there are no peg placement spaces available.
 					// this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
 					break;
+				case 'playerConfirmTurnEnd':
+					this.addActionButton('button_undoMove', _('Undo'), 'onUndoResetTurn');
+					this.addActionButton('button_turnEnd', _('End Turn'), 'onConfirmEndTurn');
+					break;
                 }
             }
         },
+
+		onUndoResetTurn: function() {
+			console.log('Undo it!');
+		},
+
+		onConfirmEndTurn: function() {
+        	console.log('confirm it!');
+		},
 
         ///////////////////////////////////////////////////
         //// Utility methods
