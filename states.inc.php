@@ -58,10 +58,17 @@ $machinestates = array(
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => array( "" => 20 )
+        "transitions" => array( "" => 10 )
     ),
-	
-	
+
+    10 => array(
+        'name'        => 'turnStart',
+        'description' => '',
+        'type'        => 'game',
+        'action'      => 'stTurnStart',
+        'transitions' => array('playerTurnSelectPieceToMove' => 20),
+    ),
+
     20 => array(
     	"name" => "playerTurnSelectPieceToMove",
     	"description" => clienttranslate('${actplayer} must move a piece'),
@@ -109,9 +116,9 @@ $machinestates = array(
 		"type" => "activeplayer",
 		"args" => "argPlayerPieces",
 		"possibleactions" => array( "selectPieceForPeg2", "passPlacePeg" ),
-		"transitions" => array( "selectPieceForPeg2" => 70, "passPlacePeg" => 80 )
+		"transitions" => array( "selectPieceForPeg2" => 70, "playerTurnConfirmEnd" => 75 )
 	),
-	
+
 	70 => array(
 		"name" => "playerTurnSelectPegLocationForPeg2Add",
 		"description" => clienttranslate('${actplayer} must add a peg'),
