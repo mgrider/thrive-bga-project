@@ -116,7 +116,7 @@ $machinestates = array(
 		"type" => "activeplayer",
 		"args" => "argPlayerPieces",
 		"possibleactions" => array( "selectPieceForPeg2", "passPlacePeg" ),
-		"transitions" => array( "selectPieceForPeg2" => 70, "playerTurnConfirmEnd" => 75 )
+		"transitions" => array( "selectPieceForPeg2" => 70, "passPlacePeg" => 75 )
 	),
 
 	70 => array(
@@ -126,7 +126,7 @@ $machinestates = array(
 		"type" => "activeplayer",
 		"args" => "argPlacePeg",
 		"possibleactions" => array( "cancelPieceSelection", "selectPeg2Location" ),
-		"transitions" => array( "cancelPieceSelection" => 60, "selectPeg2Location" => 80 )
+		"transitions" => array( "cancelPieceSelection" => 60, "selectPeg2Location" => 75 )
 	),
 
     75 => array(
