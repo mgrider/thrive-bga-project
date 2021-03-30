@@ -111,7 +111,28 @@
 		$result = $this->game->selectPegLocation( $peg_index, $check );
 		self::ajaxResponse();
 	}
-	
+
+      /**
+       * Handle the playerTurnUndo action.
+       *
+       * This method gets called when the player clicks the 'Undo' button to restart their turn.
+       */
+	public function playerTurnUndo() {
+	    self::setAjaxMode();
+        $this->game->playerTurnUndo();
+	    self::ajaxResponse();
+    }
+
+      /**
+       * Handle the playerTurnConfirmEnd action.
+       *
+       * This method gets called when the player clicks the 'End Turn' button to confirm their move.
+       */
+    public function playerTurnConfirmEnd() {
+	    self::setAjaxMode();
+	    $this->game->playerTurnConfirmEnd();
+	    self::ajaxResponse();
+    }
   }
-  
+
 

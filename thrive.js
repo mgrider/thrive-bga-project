@@ -608,15 +608,53 @@ function (dojo, declare) {
 		/**
 		 * Handle the playerTurnUndo action.
 		 */
-		onPlayerTurnUndo: function() {
-			console.log('Undo it!');
+		onPlayerTurnUndo: function( event ) {
+			console.log( 'onPlayerTurnUndo' );
+
+			dojo.stopEvent( event );
+
+			if ( ! this.checkAction( 'playerTurnUndo' ) ) {
+				return;
+			}
+
+			this.ajaxcall(
+				'/thrive/thrive/playerTurnUndo.html',
+				{},
+				this,
+				function( result ) {
+					console.log( 'that was successful' );
+				},
+				function( is_error ) {
+					console.log( 'that was utter failure' );
+				}
+			);
 		},
 
 		/**
 		 * Handle the playerTurnConfirmEnd action.
 		 */
-		onPlayerTurnConfirmEnd: function() {
-			console.log('confirm it!');
+		onPlayerTurnConfirmEnd: function( event ) {
+			console.log( 'onPlayerTurnConfirmEnd' );
+
+			dojo.stopEvent( event );
+
+			if ( ! this.checkAction( 'playerTurnConfirmEnd' ) ) {
+				return;
+			}
+
+			this.ajaxcall(
+				'/thrive/thrive/playerTurnConfirmEnd.html',
+				{},
+				this,
+				function( result ) {
+					console.log( result );
+					console.log( 'onPlayerTurnConfirmEnd was successful.' );
+				},
+				function( is_error ) {
+					console.log( is_error );
+					console.log( 'onPlayerTurnConfirmEnd was unsuccessful.' );
+				}
+			)
 		},
 
         ///////////////////////////////////////////////////
