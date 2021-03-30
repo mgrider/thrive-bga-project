@@ -266,20 +266,12 @@ function (dojo, declare) {
 					// this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
 					break;
 				case 'playerConfirmTurnEnd':
-					this.addActionButton('button_undoMove', _('Undo'), 'onUndoResetTurn');
-					this.addActionButton('button_turnEnd', _('End Turn'), 'onConfirmEndTurn');
+					this.addActionButton('button_undoMove', _('Undo'), 'onPlayerTurnUndo');
+					this.addActionButton('button_turnEnd', _('End Turn'), 'onPlayerTurnConfirmEnd');
 					break;
                 }
             }
         },
-
-		onUndoResetTurn: function() {
-			console.log('Undo it!');
-		},
-
-		onConfirmEndTurn: function() {
-        	console.log('confirm it!');
-		},
 
         ///////////////////////////////////////////////////
         //// Utility methods
@@ -613,6 +605,19 @@ function (dojo, declare) {
 			}
 		},
 
+		/**
+		 * Handle the playerTurnUndo action.
+		 */
+		onPlayerTurnUndo: function() {
+			console.log('Undo it!');
+		},
+
+		/**
+		 * Handle the playerTurnConfirmEnd action.
+		 */
+		onPlayerTurnConfirmEnd: function() {
+			console.log('confirm it!');
+		},
 
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications
