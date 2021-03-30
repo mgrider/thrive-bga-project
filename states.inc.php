@@ -128,7 +128,16 @@ $machinestates = array(
 		"possibleactions" => array( "cancelPieceSelection", "selectPeg2Location" ),
 		"transitions" => array( "cancelPieceSelection" => 60, "selectPeg2Location" => 80 )
 	),
-	
+
+    75 => array(
+        'name'              => 'playerConfirmTurnEnd',
+        'description'       => clienttranslate('${actplayer} must confirm their turn.'),
+        'descriptionmyturn' => clienttranslate('End turn?'),
+        'type'              => 'activeplayer',
+        'possibleactions'   => array('playerTurnUndo', 'playerTurnConfirmEnd'),
+        'transitions'       => array('playerTurnSelectPieceToMove' => 20, 'turnEnd' => 80),
+    ),
+
 	80 => array(
 		"name" => "turnEnd",
 		"description" => '',
