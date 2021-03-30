@@ -608,12 +608,12 @@ function (dojo, declare) {
 		/**
 		 * Handle the playerTurnUndo action.
 		 */
-		onPlayerTurnUndo: function( event ) {
-			console.log( 'onPlayerTurnUndo' );
+		onPlayerTurnUndo: function (event) {
+			console.log('onPlayerTurnUndo');
 
-			dojo.stopEvent( event );
+			dojo.stopEvent(event);
 
-			if ( ! this.checkAction( 'playerTurnUndo' ) ) {
+			if (!this.checkAction('playerTurnUndo')) {
 				return;
 			}
 
@@ -621,11 +621,11 @@ function (dojo, declare) {
 				'/thrive/thrive/playerTurnUndo.html',
 				{},
 				this,
-				function( result ) {
-					console.log( 'that was successful' );
+				function (result) {
+					console.log('that was successful');
 				},
-				function( is_error ) {
-					console.log( 'that was utter failure' );
+				function (is_error) {
+					console.log('that was utter failure');
 				}
 			);
 		},
@@ -633,12 +633,12 @@ function (dojo, declare) {
 		/**
 		 * Handle the playerTurnConfirmEnd action.
 		 */
-		onPlayerTurnConfirmEnd: function( event ) {
-			console.log( 'onPlayerTurnConfirmEnd' );
+		onPlayerTurnConfirmEnd: function (event) {
+			console.log('onPlayerTurnConfirmEnd');
 
-			dojo.stopEvent( event );
+			dojo.stopEvent(event);
 
-			if ( ! this.checkAction( 'playerTurnConfirmEnd' ) ) {
+			if (!this.checkAction('playerTurnConfirmEnd')) {
 				return;
 			}
 
@@ -646,13 +646,13 @@ function (dojo, declare) {
 				'/thrive/thrive/playerTurnConfirmEnd.html',
 				{},
 				this,
-				function( result ) {
-					console.log( result );
-					console.log( 'onPlayerTurnConfirmEnd was successful.' );
+				function (result) {
+					console.log(result);
+					console.log('onPlayerTurnConfirmEnd was successful.');
 				},
-				function( is_error ) {
-					console.log( is_error );
-					console.log( 'onPlayerTurnConfirmEnd was unsuccessful.' );
+				function (is_error) {
+					console.log(is_error);
+					console.log('onPlayerTurnConfirmEnd was unsuccessful.');
 				}
 			)
 		},
