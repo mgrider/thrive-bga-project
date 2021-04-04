@@ -83,7 +83,7 @@ $machinestates = array(
 		"possibleactions"   => array("cancelPieceSelection", "selectMoveLocation", "endGame"),
 		"transitions"       => array(
 			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PIECE,
-			"selectMoveLocation"   => STATE_PLAYER_TURN_SELECT_PIECE_LOCATION,
+			"selectMoveLocation"   => STATE_PLAYER_TURN_SELECT_PEG1_PIECE,
 			"endGame"              => STATE_GAME_END,
 		),
 	),
