@@ -7,7 +7,7 @@
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
- * 
+ *
  * states.inc.php
  *
  * thrive game states description
@@ -49,110 +49,106 @@
 
 //    !! It is not a good idea to modify this file when a game is running !!
 
- 
+
 $machinestates = array(
 
     // The initial state. Please do not modify.
-    1 => array(
-        "name" => "gameSetup",
-        "description" => "",
-        "type" => "manager",
-        "action" => "stGameSetup",
-        "transitions" => array( "" => 20 )
-    ),
-	
-	
-    20 => array(
-    	"name" => "playerTurnSelectPieceToMove",
-    	"description" => clienttranslate('${actplayer} must move a piece'),
-    	"descriptionmyturn" => clienttranslate('${you} must select the piece to move'),
-    	"type" => "activeplayer",
-		"args" => "argPlayerPieces",
-    	"possibleactions" => array( "selectPieceToMove", "passMovePiece" ),
-    	"transitions" => array( "selectPieceToMove" => 30, "passMovePiece" => 40 )
-    ),
-	
-	30 => array(
-		"name" => "playerTurnSelectLocationToMove",
-		"description" => clienttranslate('${actplayer} must move a piece'),
-		"descriptionmyturn" => clienttranslate('${you} must select where you move your piece'),
-		"type" => "activeplayer",
-		"args" => "argMovePiece",
-		"possibleactions" => array( "cancelPieceSelection", "selectMoveLocation", "endGame" ),
-		"transitions" => array( "cancelPieceSelection" => 20, "selectMoveLocation" => 40, "endGame" => 99 )
+	STATE_GAME_SETUP => array(
+		"name"        => "gameSetup",
+		"description" => "",
+		"type"        => "manager",
+		"action"      => "stGameSetup",
+		"transitions" => array("" => STATE_PLAYER_TURN_SELECT_PIECE),
 	),
-	
-	40 => array(
-		"name" => "playerTurnSelectPieceForPeg1Add",
-		"description" => clienttranslate('${actplayer} must add a peg'),
-		"descriptionmyturn" => clienttranslate('${you} must select a piece to add your first peg'),
-		"type" => "activeplayer",
-		"args" => "argPlayerPieces",
-		"possibleactions" => array( "selectPieceForPeg1", "passPlacePeg" ),
-		"transitions" => array( "selectPieceForPeg1" => 50, "passPlacePeg" => 80 )
-	),
-	
-	50 => array(
-		"name" => "playerTurnSelectPegLocationForPeg1Add",
-		"description" => clienttranslate('${actplayer} must add a peg'),
-		"descriptionmyturn" => clienttranslate('${you} must add a peg to the selected piece'),
-		"type" => "activeplayer",
-		"args" => "argPlacePeg",
-		"possibleactions" => array( "cancelPieceSelection", "selectPeg1Location" ),
-		"transitions" => array( "cancelPieceSelection" => 40, "selectPeg1Location" => 60 )
-	),
-	
-	60 => array(
-		"name" => "playerTurnSelectPieceForPeg2Add",
-		"description" => clienttranslate('${actplayer} must add a peg'),
-		"descriptionmyturn" => clienttranslate('${you} must select a piece to add your second peg'),
-		"type" => "activeplayer",
-		"args" => "argPlayerPieces",
-		"possibleactions" => array( "selectPieceForPeg2", "passPlacePeg" ),
-		"transitions" => array( "selectPieceForPeg2" => 70, "passPlacePeg" => 80 )
-	),
-	
-	70 => array(
-		"name" => "playerTurnSelectPegLocationForPeg2Add",
-		"description" => clienttranslate('${actplayer} must add a peg'),
-		"descriptionmyturn" => clienttranslate('${you} must add a peg to the selected piece'),
-		"type" => "activeplayer",
-		"args" => "argPlacePeg",
-		"possibleactions" => array( "cancelPieceSelection", "selectPeg2Location" ),
-		"transitions" => array( "cancelPieceSelection" => 60, "selectPeg2Location" => 80 )
-	),
-	
-	80 => array(
-		"name" => "turnEnd",
-		"description" => '',
-		"type" => "game",
-		"action" => "stTurnEnd",
-		"updateGameProgression" => true,
-		"transitions" => array( "nextPlayer" => 20 )
-	),
-/*
-    Examples:
-    
-    2 => array(
-        "name" => "nextPlayer",
-        "description" => '',
-        "type" => "game",
-        "action" => "stNextPlayer",
-        "updateGameProgression" => true,   
-        "transitions" => array( "endGame" => 99, "nextPlayer" => 10 )
-    ),
-    
-    10 => array(
-        "name" => "playerTurn",
-        "description" => clienttranslate('${actplayer} must play a card or pass'),
-        "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-        "type" => "activeplayer",
-        "possibleactions" => array( "playCard", "pass" ),
-        "transitions" => array( "playCard" => 2, "pass" => 2 )
-    ), 
 
-*/    
-   
+	STATE_PLAYER_TURN_SELECT_PIECE => array(
+		"name"              => "playerTurnSelectPieceToMove",
+		"description"       => clienttranslate('${actplayer} must move a piece'),
+		"descriptionmyturn" => clienttranslate('${you} must select the piece to move'),
+		"type"              => "activeplayer",
+		"args"              => "argPlayerPieces",
+		"possibleactions"   => array("selectPieceToMove", "passMovePiece"),
+		"transitions"       => array(
+			"selectPieceToMove" => STATE_PLAYER_TURN_SELECT_LOCATION,
+			"passMovePiece"     => STATE_PLAYER_TURN_SELECT_PEG1_LOCATION,
+		),
+	),
+
+	STATE_PLAYER_TURN_SELECT_LOCATION => array(
+		"name"              => "playerTurnSelectLocationToMove",
+		"description"       => clienttranslate('${actplayer} must move a piece'),
+		"descriptionmyturn" => clienttranslate('${you} must select where you move your piece'),
+		"type"              => "activeplayer",
+		"args"              => "argMovePiece",
+		"possibleactions"   => array("cancelPieceSelection", "selectMoveLocation", "endGame"),
+		"transitions"       => array(
+			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PIECE,
+			"selectMoveLocation"   => STATE_PLAYER_TURN_SELECT_LOCATION,
+			"endGame"              => STATE_GAME_END,
+		),
+	),
+
+	STATE_PLAYER_TURN_SELECT_PEG1_PIECE => array(
+		"name"              => "playerTurnSelectPieceForPeg1Add",
+		"description"       => clienttranslate('${actplayer} must add a peg'),
+		"descriptionmyturn" => clienttranslate('${you} must select a piece to add your first peg'),
+		"type"              => "activeplayer",
+		"args"              => "argPlayerPieces",
+		"possibleactions"   => array("selectPieceForPeg1", "passPlacePeg"),
+		"transitions"       => array(
+			"selectPieceForPeg1" => STATE_PLAYER_TURN_SELECT_PEG1_LOCATION,
+			"passPlacePeg"       => STATE_PLAYER_TURN_END,
+		),
+	),
+
+	STATE_PLAYER_TURN_SELECT_PEG1_LOCATION => array(
+		"name"              => "playerTurnSelectPegLocationForPeg1Add",
+		"description"       => clienttranslate('${actplayer} must add a peg'),
+		"descriptionmyturn" => clienttranslate('${you} must add a peg to the selected piece'),
+		"type"              => "activeplayer",
+		"args"              => "argPlacePeg",
+		"possibleactions"   => array("cancelPieceSelection", "selectPeg1Location"),
+		"transitions"       => array(
+			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PEG1_PIECE,
+			"selectPeg1Location"   => STATE_PLAYER_TURN_SELECT_PEG2_PIECE,
+		),
+	),
+
+	STATE_PLAYER_TURN_SELECT_PEG2_PIECE => array(
+		"name"              => "playerTurnSelectPieceForPeg2Add",
+		"description"       => clienttranslate('${actplayer} must add a peg'),
+		"descriptionmyturn" => clienttranslate('${you} must select a piece to add your second peg'),
+		"type"              => "activeplayer",
+		"args"              => "argPlayerPieces",
+		"possibleactions"   => array("selectPieceForPeg2", "passPlacePeg"),
+		"transitions"       => array(
+			"selectPieceForPeg2" => STATE_PLAYER_TURN_SELECT_PEG2_LOCATION,
+			"passPlacePeg"       => STATE_PLAYER_TURN_END,
+		),
+	),
+
+	STATE_PLAYER_TURN_SELECT_PEG2_LOCATION => array(
+		"name"              => "playerTurnSelectPegLocationForPeg2Add",
+		"description"       => clienttranslate('${actplayer} must add a peg'),
+		"descriptionmyturn" => clienttranslate('${you} must add a peg to the selected piece'),
+		"type"              => "activeplayer",
+		"args"              => "argPlacePeg",
+		"possibleactions"   => array("cancelPieceSelection", "selectPeg2Location"),
+		"transitions"       => array(
+			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PEG2_PIECE,
+			"selectPeg2Location"   => STATE_PLAYER_TURN_END,
+		),
+	),
+
+	STATE_PLAYER_TURN_END => array(
+		"name"                  => "turnEnd",
+		"description"           => '',
+		"type"                  => "game",
+		"action"                => "stTurnEnd",
+		"updateGameProgression" => true,
+		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_SELECT_PIECE),
+	),
+
     // Final state.
     // Please do not modify (and do not overload action/args methods).
     99 => array(
@@ -162,8 +158,4 @@ $machinestates = array(
         "action" => "stGameEnd",
         "args" => "argGameEnd"
     )
-
 );
-
-
-
