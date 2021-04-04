@@ -52,16 +52,16 @@
 
 $machinestates = array(
 
-    // The initial state. Please do not modify.
+	// The initial state. Please do not modify.
 	STATE_GAME_SETUP => array(
 		"name"        => "gameSetup",
 		"description" => "",
 		"type"        => "manager",
 		"action"      => "stGameSetup",
-		"transitions" => array("" => 10),
+		"transitions" => array("" => STATE_PLAYER_TURN_START),
 	),
 
-	10 => array(
+	STATE_PLAYER_TURN_START => array(
 		'name'        => 'turnStart',
 		'description' => '',
 		'type'        => 'game',
@@ -131,7 +131,7 @@ $machinestates = array(
 		"possibleactions"   => array("selectPieceForPeg2", "passPlacePeg"),
 		"transitions"       => array(
 			"selectPieceForPeg2" => STATE_PLAYER_TURN_SELECT_PEG2_LOCATION,
-			"passPlacePeg"       => 75,
+			"passPlacePeg"       => STATE_PLAYER_CONFIRM_TURN_END,
 		),
 	),
 
@@ -144,17 +144,20 @@ $machinestates = array(
 		"possibleactions"   => array("cancelPieceSelection", "selectPeg2Location"),
 		"transitions"       => array(
 			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PEG2_PIECE,
-			"selectPeg2Location"   => 75,
+			"selectPeg2Location"   => STATE_PLAYER_CONFIRM_TURN_END,
 		),
 	),
 
-	75 => array(
+	STATE_PLAYER_CONFIRM_TURN_END => array(
 		'name'              => 'playerConfirmTurnEnd',
 		'description'       => clienttranslate('${actplayer} must confirm their turn.'),
 		'descriptionmyturn' => clienttranslate('End turn?'),
 		'type'              => 'activeplayer',
 		'possibleactions'   => array('playerTurnUndo', 'playerTurnConfirmEnd'),
-		'transitions'       => array('playerTurnSelectPieceToMove' => 20, 'turnEnd' => 80),
+		'transitions'       => array(
+			'playerTurnSelectPieceToMove' => STATE_PLAYER_TURN_SELECT_PIECE,
+			'turnEnd'                     => STATE_PLAYER_TURN_END,
+		),
 	),
 
 	STATE_PLAYER_TURN_END => array(
