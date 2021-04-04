@@ -266,7 +266,7 @@ function (dojo, declare) {
 					// this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
 					break;
 				case 'playerConfirmTurnEnd':
-					this.addActionButton('button_undoMove', _('Undo'), 'onPlayerTurnUndo');
+					this.addActionButton('button_undoMove', _('Undo'), 'onPlayerTurnUndo', null, false, 'red');
 					this.addActionButton('button_turnEnd', _('End Turn'), 'onPlayerTurnConfirmEnd');
 					break;
                 }
