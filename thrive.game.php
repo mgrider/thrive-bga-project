@@ -106,33 +106,8 @@ class thrive extends Table
         // TODO: setup the initial game situation here
 
 		/************ Start the game initialization *****/
-		list( $blueplayer_id, $whiteplayer_id ) = array_keys( $players );
-
-		$sql = "INSERT INTO piece (piece_id, player_id, piece_x, piece_y) VALUES ";
-		$sql .= "(0 , $blueplayer_id, 0, 0),";
-		$sql .= "(1 , $blueplayer_id, 1, 0),";
-		$sql .= "(2 , $blueplayer_id, 2, 0),";
-		$sql .= "(3 , $blueplayer_id, 3, 0),";
-		$sql .= "(4 , $blueplayer_id, 4, 0),";
-		$sql .= "(5 , $blueplayer_id, 5, 0),";
-		$sql .= "(6 , $whiteplayer_id, 0, 5),";
-		$sql .= "(7 , $whiteplayer_id, 1, 5),";
-		$sql .= "(8 , $whiteplayer_id, 2, 5),";
-		$sql .= "(9 , $whiteplayer_id, 3, 5),";
-		$sql .= "(10 ,$whiteplayer_id, 4, 5),";
-		$sql .= "(11 ,$whiteplayer_id, 5, 5)";
-		self::DbQuery( $sql );
-
-		$sql = "INSERT INTO peg (piece_id, peg_index) VALUES ";
-		$sql_values = array();
-		for( $p=0; $p<=5; $p++ ) {
-			$sql_values[] = "('$p', 17)";
-		}
-		for ($p = 6; $p <= 11; $p++ ) {
-			$sql_values[] = "('$p', 7)";
-		}
-		$sql .= implode( $sql_values, ',' );
-		self::DbQuery( $sql );
+		$this->insert_player_pieces( $players );
+		$this->initialize_pegs();
 
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
@@ -140,15 +115,60 @@ class thrive extends Table
         /************ End of the game initialization *****/
     }
 
-    /*
-        getAllDatas:
+	/**
+	 * Initializes starting pieces for both players.
+	 *
+	 * @param array $players
+	 */
+    private function insert_player_pieces(array $players) {
+		[$blueplayer_id, $whiteplayer_id] = array_keys($players);
 
-        Gather all informations about current game situation (visible by the current player).
+		$sql = "INSERT INTO piece (piece_id, player_id, piece_x, piece_y) VALUES ";
+		$sql .= "(1, $blueplayer_id, 0, 0),";
+		$sql .= "(2, $blueplayer_id, 1, 0),";
+		$sql .= "(3, $blueplayer_id, 2, 0),";
+		$sql .= "(4, $blueplayer_id, 3, 0),";
+		$sql .= "(5, $blueplayer_id, 4, 0),";
+		$sql .= "(6, $blueplayer_id, 5, 0),";
+		$sql .= "(7, $whiteplayer_id, 0, 5),";
+		$sql .= "(8, $whiteplayer_id, 1, 5),";
+		$sql .= "(9, $whiteplayer_id, 2, 5),";
+		$sql .= "(10, $whiteplayer_id, 3, 5),";
+		$sql .= "(11, $whiteplayer_id, 4, 5),";
+		$sql .= "(12, $whiteplayer_id, 5, 5)";
 
-        The method is called each time the game interface is displayed to a player, ie:
-        _ when the game starts
-        _ when a player refreshes the game page (F5)
-    */
+		self::DbQuery($sql);
+	}
+
+	/**
+	 * Inserts the initial set of pegs for the starting board state.
+	 */
+	private function insert_pegs_for_pieces()
+	{
+		$sql        = "INSERT INTO peg (piece_id, peg_index) VALUES ";
+		$sql_values = [];
+		for ($piece_id = 1; $piece_id <= 6; $piece_id++) {
+			$sql_values[] = "('$piece_id', 17)";
+		}
+
+		for ($piece_id = 7; $piece_id <= 12; $piece_id++) {
+			$sql_values[] = "('$piece_id', 7)";
+		}
+
+		$sql .= implode($sql_values, ',');
+
+		self::DbQuery($sql);
+	}
+
+	/*
+		getAllDatas:
+
+		Gather all informations about current game situation (visible by the current player).
+
+		The method is called each time the game interface is displayed to a player, ie:
+		_ when the game starts
+		_ when a player refreshes the game page (F5)
+	*/
     protected function getAllDatas()
     {
         $result = array();
@@ -584,9 +604,7 @@ class thrive extends Table
     public function stTurnStart()
     {
         self::trace('stTurnStart');
-
         $this->undoSavePoint();
-
         $this->gamestate->nextState();
     }
 
