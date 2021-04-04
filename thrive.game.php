@@ -107,7 +107,7 @@ class thrive extends Table
 
 		/************ Start the game initialization *****/
 		$this->insert_player_pieces( $players );
-		$this->initialize_pegs();
+		$this->insert_pegs_for_pieces();
 
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
