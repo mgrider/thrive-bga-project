@@ -3,11 +3,11 @@
   *------
   * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
   * thrive implementation : © Philippe Dubrulle p.dubrulle@gmail.com
-  * 
+  *
   * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
   * See http://en.boardgamearena.com/#!doc/Studio for more information.
   * -----
-  * 
+  *
   * thrive.game.php
   *
   * This is the main file for your game logic.
@@ -18,6 +18,17 @@
 
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
+
+// Define game states.
+define( 'STATE_GAME_SETUP', 1 );
+define( 'STATE_PLAYER_TURN_SELECT_PIECE', 20 );
+define( 'STATE_PLAYER_TURN_SELECT_LOCATION', 30 );
+define( 'STATE_PLAYER_TURN_SELECT_PEG1_PIECE', 40 );
+define( 'STATE_PLAYER_TURN_SELECT_PEG1_LOCATION', 50 );
+define( 'STATE_PLAYER_TURN_SELECT_PEG2_PIECE', 60 );
+define( 'STATE_PLAYER_TURN_SELECT_PEG2_LOCATION', 70 );
+define( 'STATE_PLAYER_TURN_END', 80 );
+define( 'STATE_GAME_END', 99 );
 
 
 class thrive extends Table
@@ -31,8 +42,8 @@ class thrive extends Table
         //  the corresponding ID in gameoptions.inc.php.
         // Note: afterwards, you can get/set the global variables with getGameStateValue/setGameStateInitialValue/setGameStateValue
         parent::__construct();
-        
-        self::initGameStateLabels( array( 
+
+        self::initGameStateLabels( array(
             //    "my_first_global_variable" => 10,
             //    "my_second_global_variable" => 11,
             //      ...
@@ -40,31 +51,31 @@ class thrive extends Table
             //    "my_second_game_variant" => 101,
             //      ...
 			"selectedPieceID" => 10
-        ) );        
+        ) );
 	}
-	
+
     protected function getGameName( )
     {
 		// Used for translations and stuff. Please do not modify.
         return "thrive";
-    }	
+    }
 
     /*
         setupNewGame:
-        
+
         This method is called only once, when a new game is launched.
         In this method, you must setup the game according to the game rules, so that
         the game is ready to be played.
     */
     protected function setupNewGame( $players, $options = array() )
-    {    
+    {
         // Set the colors of the players with HTML color code
         // The default below is red/green/blue/orange/brown
         // The number of colors defined here must correspond to the maximum number of players allowed for the gams
         $gameinfos = self::getGameinfos();
         // $default_colors = $gameinfos['player_colors'];
 		$default_colors = [ "4fb0bd", "ffffff" ];
-		
+
         // Create players
         // Note: if you added some extra field on "player" table in the database (dbmodel.sql), you can initialize it there.
         $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES ";
@@ -78,23 +89,23 @@ class thrive extends Table
         self::DbQuery( $sql );
         //self::reattributeColorsBasedOnPreferences( $players, $gameinfos['player_colors'] );
         self::reloadPlayersBasicInfos();
-        
+
         /************ Start the game initialization *****/
 
         // Init global values with their initial values
         //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
         self::setGameStateInitialValue( 'selectedPieceID', -1 );
-		
+
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
         //self::initStat( 'table', 'table_teststat1', 0 );    // Init a table statistics
         //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
 
         // TODO: setup the initial game situation here
-		
+
 		/************ Start the game initialization *****/
 		list( $blueplayer_id, $whiteplayer_id ) = array_keys( $players );
-		
+
 		$sql = "INSERT INTO piece (piece_id, player_id, piece_x, piece_y) VALUES ";
 		$sql .= "(0 , $blueplayer_id, 0, 0),";
 		$sql .= "(1 , $blueplayer_id, 1, 0),";
@@ -109,7 +120,7 @@ class thrive extends Table
 		$sql .= "(10 ,$whiteplayer_id, 4, 5),";
 		$sql .= "(11 ,$whiteplayer_id, 5, 5)";
 		self::DbQuery( $sql );
-		
+
 		$sql = "INSERT INTO peg (piece_id, peg_index) VALUES ";
 		$sql_values = array();
 		for( $p=0; $p<=5; $p++ ) {
@@ -120,7 +131,7 @@ class thrive extends Table
 		}
 		$sql .= implode( $sql_values, ',' );
 		self::DbQuery( $sql );
-		
+
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
 
@@ -128,10 +139,10 @@ class thrive extends Table
     }
 
     /*
-        getAllDatas: 
-        
+        getAllDatas:
+
         Gather all informations about current game situation (visible by the current player).
-        
+
         The method is called each time the game interface is displayed to a player, ie:
         _ when the game starts
         _ when a player refreshes the game page (F5)
@@ -139,14 +150,14 @@ class thrive extends Table
     protected function getAllDatas()
     {
         $result = array();
-    
+
         $current_player_id = self::getCurrentPlayerId();    // !! We must only return informations visible by this player !!
-    
+
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
         $sql = "SELECT player_id id, player_score score FROM player ";
         $result['players'] = self::getCollectionFromDb( $sql );
-  
+
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
 		// Get pieces positions
 		$result['pieces'] = self::getObjectListFromDb( "SELECT piece_id, player_id, piece_x x, piece_y y, alive, selected
@@ -160,12 +171,12 @@ class thrive extends Table
 
     /*
         getGameProgression:
-        
+
         Compute and return the current game progression.
         The number returned must be an integer beween 0 (=the game just started) and
         100 (= the game is finished or almost finished).
-    
-        This method is called each time we are in a game state with the "updateGameProgression" property set to true 
+
+        This method is called each time we are in a game state with the "updateGameProgression" property set to true
         (see states.inc.php)
     */
     function getGameProgression()
@@ -187,13 +198,13 @@ class thrive extends Table
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Utility functions
-////////////    
+////////////
 
     /*
         In this space, you can put any utility methods useful for your game logic
     */
 
-    
+
     // Get the pieces positions with a double associative array
     function getPlayerPieces( $player_id ) {
 		$sql = "SELECT piece_id id, piece_x x, piece_y y FROM piece WHERE alive = 1 AND player_id = " . $player_id;
@@ -244,7 +255,7 @@ class thrive extends Table
 					$result[ $test_x ][ $test_y ] = true;
 			}
 
-		} else throw new feException( "No piece selected" ); 
+		} else throw new feException( "No piece selected" );
 
         return $result;
     }
@@ -252,7 +263,7 @@ class thrive extends Table
     // Get the list of possible peg places on the piece
     function getPossiblePegPositions( $IdOfSelectedPiece ) { // if $IdOfSelectedPiece == 99 : find if there is a possible peg placement the player
         $result = array();
-		
+
 		// get the id of the piece to move
 //		$IdOfPieceToMove = self::getGameStateValue( 'selectedPieceID' );
 		if ( $IdOfSelectedPiece == 99) {
@@ -272,22 +283,22 @@ class thrive extends Table
 
 			$all_positions = range( 0, 24 );
 			unset($all_positions[12]); // the central peg
-		
+
 			// get the peg positions of the piece to move
 			$sql = "SELECT peg_index FROM peg WHERE piece_id = " . $IdOfSelectedPiece;
 			$pegs = self::getCollectionFromDB( $sql );
-			
+
 			$result = array_diff( $all_positions, array_keys($pegs) );
 
 
-		} else throw new feException( "No piece selected" ); 
+		} else throw new feException( "No piece selected" );
 
         return $result;
 	}
-	
+
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
-//////////// 
+////////////
 
     /*
         Each time a player is doing some game action, one of the methods below is called.
@@ -295,19 +306,19 @@ class thrive extends Table
     */
 
     /*
-    
+
     Example:
 
     function playCard( $card_id )
     {
         // Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
-        self::checkAction( 'playCard' ); 
-        
+        self::checkAction( 'playCard' );
+
         $player_id = self::getActivePlayerId();
-        
-        // Add your game logic to play a card there 
+
+        // Add your game logic to play a card there
         ...
-        
+
         // Notify all players about the card played
         self::notifyAllPlayers( "cardPlayed", clienttranslate( '${player_name} plays ${card_name}' ), array(
             'player_id' => $player_id,
@@ -315,21 +326,21 @@ class thrive extends Table
             'card_name' => $card_name,
             'card_id' => $card_id
         ) );
-          
+
     }
-    
+
     */
-	
+
 	function selectPieceToMove( $id, $check ) { // $check is either selectPieceToMove or selectPieceForPeg1 or selectPieceForPeg2
 		// Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
 		self::checkAction( $check );
-		
+
 		$player_id = self::getActivePlayerId();
 //		$playerPieces = self::getPlayerPieces($player_id);
 		self::setGameStateValue( 'selectedPieceID', $id );
 		$sql = "UPDATE piece SET selected = 1 WHERE piece_id = " . $id;
 		self::dbQuery( $sql );
-		
+
 		// Notify
 		self::notifyAllPlayers( "selectedPieceToMove", clienttranslate( '${player_name} selected a piece' ), array(
 			'player_id' => self::getActivePlayerId(),
@@ -339,11 +350,11 @@ class thrive extends Table
 		// Then go to the next state
 		$this->gamestate->nextState( $check );
 	}
-    
+
 	function cancelPieceSelection( $check ) { // $check is either selectMoveLocation or selectPeg1Location or selectPeg2Location
 		// Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
 		self::checkAction( $check, false );
-		
+
 		$player_id = self::getActivePlayerId();
 		self::setGameStateValue( 'selectedPieceID', -1 );
 		$sql = "UPDATE piece SET selected = 0";
@@ -357,7 +368,7 @@ class thrive extends Table
 		// Then go to the next state
 		$this->gamestate->nextState( 'cancelPieceSelection' );
 	}
-	
+
 	function selectMoveLocation( $x, $y ) {
 		// Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
         self::checkAction( 'selectMoveLocation' );
@@ -374,7 +385,7 @@ class thrive extends Table
 			if ( isset( $poss_moves[ $x ] ) && isset( $poss_moves[ $x ][ $y ] ) && $poss_moves[ $x ][ $y ] == true ) { // this is a possible move !
 				// opposite player lost the game ?
 				$opposite_player_has_lost = false;
-				
+
 				// Check if on other player piece
 				$sql = "SELECT piece_id, piece_x x, piece_y y, player_id FROM piece WHERE alive = 1 AND piece_x = " . $x . " AND piece_y = " . $y;
 				$pieces = self::getObjectListFromDB( $sql, true );
@@ -392,7 +403,7 @@ class thrive extends Table
 					if ( count( $opposite_pieces ) == 1 )
 						$opposite_player_has_lost = true;
 				}
-				
+
 				// Move piece to new coordinates x,y and unselect it
 				$sql = "UPDATE piece SET piece_x = " . $x . ", piece_y = " . $y . ", selected = 0 WHERE piece_id = " . $IdOfPieceToMove;
 				self::dbQuery( $sql );
@@ -406,7 +417,7 @@ class thrive extends Table
 					'y' => $y,
 					'id' => $IdOfPieceToMove
 				) );
-				
+
 				// Then go to the next state
 				if ( $opposite_player_has_lost == true ) {
 					$sql = "UPDATE player SET player_score=1  WHERE player_id='" . self::getActivePlayerId() . "'";
@@ -438,7 +449,7 @@ class thrive extends Table
 			$this->gamestate->nextState( 'passMovePiece' );
 		} else throw new feException( "You must move a piece" );
 	}
-	
+
 	function selectPegLocation( $peg_index, $check ) {
 		// Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
 
@@ -461,7 +472,7 @@ class thrive extends Table
 				$sql = "UPDATE piece SET selected = 0 WHERE piece_id = " . $IdOfSelectedPiece;
 				self::dbQuery( $sql );
 				self::setGameStateValue( 'selectedPieceID', -1 );
-				
+
 				// Notify
 				self::notifyAllPlayers( "selectedPegLocation", clienttranslate( '${player_name} placed a peg' ), array(
 					'player_id' => self::getActivePlayerId(),
@@ -469,7 +480,7 @@ class thrive extends Table
 					'peg_index' => $peg_index,
 					'piece_id' => $IdOfSelectedPiece
 				) );
-				
+
 				// Then go to the next state
 				if ( $check == "selectPeg1Location" )
 					$this->gamestate->nextState( 'selectPeg1Location' );
@@ -479,10 +490,10 @@ class thrive extends Table
 		} else throw new feException( "No piece selected" );
 	}
 
-	function passPlacePeg( $check ) { // $check is either 
+	function passPlacePeg( $check ) { // $check is either
 		// Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
 		self::checkAction( $check, false );
-	
+
 		if ( self::getPossiblePegPositions( 99 ) == false ) {
 			$player_id = self::getActivePlayerId();
 			self::setGameStateValue( 'selectedPieceID', -1 );
@@ -498,7 +509,7 @@ class thrive extends Table
 			$this->gamestate->nextState( 'passPlacePeg' );
 		} else throw new feException( "You must place a peg" );
 	}
-	
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
@@ -530,20 +541,20 @@ class thrive extends Table
 	}
 
     /*
-    
+
     Example for game state "MyGameState":
-    
+
     function argMyGameState()
     {
         // Get some values from the current game situation in database...
-    
+
         // return values:
         return array(
             'variable1' => $value1,
             'variable2' => $value2,
             ...
         );
-    }    
+    }
     */
 
 //////////////////////////////////////////////////////////////////////////////
@@ -602,21 +613,21 @@ class thrive extends Table
 
     /*
         zombieTurn:
-        
+
         This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
         You can do whatever you want in order to make sure the turn of this player ends appropriately
         (ex: pass).
-        
+
         Important: your zombie code will be called when the player leaves the game. This action is triggered
         from the main site and propagated to the gameserver from a server, not from a browser.
         As a consequence, there is no current player associated to this action. In your zombieTurn function,
-        you must _never_ use getCurrentPlayerId() or getCurrentPlayerName(), otherwise it will fail with a "Not logged" error message. 
+        you must _never_ use getCurrentPlayerId() or getCurrentPlayerName(), otherwise it will fail with a "Not logged" error message.
     */
 
     function zombieTurn( $state, $active_player )
     {
     	$statename = $state['name'];
-    	
+
         if ($state['type'] === "activeplayer") {
             switch ($statename) {
                 default:
@@ -630,34 +641,34 @@ class thrive extends Table
         if ($state['type'] === "multipleactiveplayer") {
             // Make sure player is in a non blocking status for role turn
             $this->gamestate->setPlayerNonMultiactive( $active_player, '' );
-            
+
             return;
         }
 
         throw new feException( "Zombie mode not supported at this game state: ".$statename );
     }
-    
+
 ///////////////////////////////////////////////////////////////////////////////////:
 ////////// DB upgrade
 //////////
 
     /*
         upgradeTableDb:
-        
+
         You don't have to care about this until your game has been published on BGA.
         Once your game is on BGA, this method is called everytime the system detects a game running with your old
         Database scheme.
         In this case, if you change your Database scheme, you just have to apply the needed changes in order to
         update the game database and allow the game to continue to run with your new version.
-    
+
     */
-    
+
     function upgradeTableDb( $from_version )
     {
         // $from_version is the current version of this game database, in numerical form.
         // For example, if the game was running with a release of your game named "140430-1345",
         // $from_version is equal to 1404301345
-        
+
         // Example:
 //        if( $from_version <= 1404301345 )
 //        {
@@ -678,5 +689,5 @@ class thrive extends Table
 //
 
 
-    }    
+    }
 }
