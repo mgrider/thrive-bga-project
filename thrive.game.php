@@ -602,6 +602,7 @@ class thrive extends Table
     public function playerTurnUndo() {
         self::checkAction('playerTurnUndo');
         $this->undoRestorePoint();
+        $this->gamestate->nextState('playerTurnSelectPieceToMove');
     }
 
     public function playerTurnConfirmEnd() {
