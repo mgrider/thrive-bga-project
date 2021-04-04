@@ -21,7 +21,7 @@ require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 
 // Define game states.
 define( 'STATE_GAME_SETUP', 1 );
-define( 'STATE_PLAYER_TURN_START', 10 );
+define( 'STATE_PLAYER_TURN_START', 2 );
 define( 'STATE_PLAYER_TURN_SELECT_PIECE', 20 );
 define( 'STATE_PLAYER_TURN_SELECT_LOCATION', 30 );
 define( 'STATE_PLAYER_TURN_SELECT_PEG1_PIECE', 40 );

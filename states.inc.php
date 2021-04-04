@@ -53,12 +53,12 @@
 $machinestates = array(
 
 	// The initial state. Please do not modify.
-	STATE_GAME_SETUP => array(
+	1 => array(
 		"name"        => "gameSetup",
 		"description" => "",
 		"type"        => "manager",
 		"action"      => "stGameSetup",
-		"transitions" => array("" => STATE_PLAYER_TURN_START),
+		"transitions" => array("" => 2),
 	),
 
 	STATE_PLAYER_TURN_START => array(
