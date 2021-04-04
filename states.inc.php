@@ -52,7 +52,7 @@
 
 $machinestates = array(
 
-    // The initial state. Please do not modify.
+	// The initial state. Please do not modify.
 	STATE_GAME_SETUP => array(
 		"name"        => "gameSetup",
 		"description" => "",
@@ -69,12 +69,12 @@ $machinestates = array(
 		"args"              => "argPlayerPieces",
 		"possibleactions"   => array("selectPieceToMove", "passMovePiece"),
 		"transitions"       => array(
-			"selectPieceToMove" => STATE_PLAYER_TURN_SELECT_LOCATION,
+			"selectPieceToMove" => STATE_PLAYER_TURN_SELECT_PIECE_LOCATION,
 			"passMovePiece"     => STATE_PLAYER_TURN_SELECT_PEG1_LOCATION,
 		),
 	),
 
-	STATE_PLAYER_TURN_SELECT_LOCATION => array(
+	STATE_PLAYER_TURN_SELECT_PIECE_LOCATION => array(
 		"name"              => "playerTurnSelectLocationToMove",
 		"description"       => clienttranslate('${actplayer} must move a piece'),
 		"descriptionmyturn" => clienttranslate('${you} must select where you move your piece'),
@@ -83,7 +83,7 @@ $machinestates = array(
 		"possibleactions"   => array("cancelPieceSelection", "selectMoveLocation", "endGame"),
 		"transitions"       => array(
 			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PIECE,
-			"selectMoveLocation"   => STATE_PLAYER_TURN_SELECT_LOCATION,
+			"selectMoveLocation"   => STATE_PLAYER_TURN_SELECT_PIECE_LOCATION,
 			"endGame"              => STATE_GAME_END,
 		),
 	),
@@ -149,9 +149,9 @@ $machinestates = array(
 		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_SELECT_PIECE),
 	),
 
-    // Final state.
-    // Please do not modify (and do not overload action/args methods).
-    99 => array(
+	// Final state.
+	// Please do not modify (and do not overload action/args methods).
+	99 => array(
         "name" => "gameEnd",
         "description" => clienttranslate("End of game"),
         "type" => "manager",
