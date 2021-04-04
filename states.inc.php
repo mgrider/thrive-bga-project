@@ -166,7 +166,7 @@ $machinestates = array(
 		"type"                  => "game",
 		"action"                => "stTurnEnd",
 		"updateGameProgression" => true,
-		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_SELECT_PIECE),
+		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_START),
 	),
 
 	// Final state.
