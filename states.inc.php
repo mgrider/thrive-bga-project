@@ -53,12 +53,20 @@
 $machinestates = array(
 
 	// The initial state. Please do not modify.
-	STATE_GAME_SETUP => array(
+	1 => array(
 		"name"        => "gameSetup",
 		"description" => "",
 		"type"        => "manager",
 		"action"      => "stGameSetup",
-		"transitions" => array("" => STATE_PLAYER_TURN_SELECT_PIECE),
+		"transitions" => array("" => 2),
+	),
+
+	STATE_PLAYER_TURN_START => array(
+		'name'        => 'turnStart',
+		'description' => '',
+		'type'        => 'game',
+		'action'      => 'stTurnStart',
+		'transitions' => array('playerTurnSelectPieceToMove' => STATE_PLAYER_TURN_SELECT_PIECE),
 	),
 
 	STATE_PLAYER_TURN_SELECT_PIECE => array(
@@ -123,7 +131,7 @@ $machinestates = array(
 		"possibleactions"   => array("selectPieceForPeg2", "passPlacePeg"),
 		"transitions"       => array(
 			"selectPieceForPeg2" => STATE_PLAYER_TURN_SELECT_PEG2_LOCATION,
-			"passPlacePeg"       => STATE_PLAYER_TURN_END,
+			"passPlacePeg"       => STATE_PLAYER_CONFIRM_TURN_END,
 		),
 	),
 
@@ -136,7 +144,19 @@ $machinestates = array(
 		"possibleactions"   => array("cancelPieceSelection", "selectPeg2Location"),
 		"transitions"       => array(
 			"cancelPieceSelection" => STATE_PLAYER_TURN_SELECT_PEG2_PIECE,
-			"selectPeg2Location"   => STATE_PLAYER_TURN_END,
+			"selectPeg2Location"   => STATE_PLAYER_CONFIRM_TURN_END,
+		),
+	),
+
+	STATE_PLAYER_CONFIRM_TURN_END => array(
+		'name'              => 'playerConfirmTurnEnd',
+		'description'       => clienttranslate('${actplayer} must confirm their turn.'),
+		'descriptionmyturn' => clienttranslate('End turn?'),
+		'type'              => 'activeplayer',
+		'possibleactions'   => array('playerTurnUndo', 'playerTurnConfirmEnd'),
+		'transitions'       => array(
+			'playerTurnSelectPieceToMove' => STATE_PLAYER_TURN_SELECT_PIECE,
+			'turnEnd'                     => STATE_PLAYER_TURN_END,
 		),
 	),
 
@@ -146,7 +166,7 @@ $machinestates = array(
 		"type"                  => "game",
 		"action"                => "stTurnEnd",
 		"updateGameProgression" => true,
-		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_SELECT_PIECE),
+		"transitions"           => array("nextPlayer" => STATE_PLAYER_TURN_START),
 	),
 
 	// Final state.

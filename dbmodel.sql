@@ -47,6 +47,5 @@ CREATE TABLE IF NOT EXISTS `peg` (
 	`peg_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`piece_id` int(10) unsigned NOT NULL,
 	`peg_index` int(10) NOT NULL,
-	PRIMARY KEY (`peg_id`),
-	FOREIGN KEY (`piece_id`) REFERENCES piece(`piece_id`)
+	PRIMARY KEY (`peg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

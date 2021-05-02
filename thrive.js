@@ -265,6 +265,10 @@ function (dojo, declare) {
 					// @TODO Skip to next player automatically if there are no peg placement spaces available.
 					// this.addActionButton('button_cancelPlacePeg', _('No peg'), 'onPassPlacePeg');
 					break;
+				case 'playerConfirmTurnEnd':
+					this.addActionButton('button_undoMove', _('Undo'), 'onPlayerTurnUndo', null, false, 'red');
+					this.addActionButton('button_turnEnd', _('End Turn'), 'onPlayerTurnConfirmEnd');
+					break;
                 }
             }
         },
@@ -601,6 +605,57 @@ function (dojo, declare) {
 			}
 		},
 
+		/**
+		 * Handle the playerTurnUndo action.
+		 */
+		onPlayerTurnUndo: function (event) {
+			console.log('onPlayerTurnUndo');
+
+			dojo.stopEvent(event);
+
+			if (!this.checkAction('playerTurnUndo')) {
+				return;
+			}
+
+			this.ajaxcall(
+				'/thrive/thrive/playerTurnUndo.html',
+				{},
+				this,
+				function (result) {
+					console.log('that was successful');
+				},
+				function (is_error) {
+					console.log('that was utter failure');
+				}
+			);
+		},
+
+		/**
+		 * Handle the playerTurnConfirmEnd action.
+		 */
+		onPlayerTurnConfirmEnd: function (event) {
+			console.log('onPlayerTurnConfirmEnd');
+
+			dojo.stopEvent(event);
+
+			if (!this.checkAction('playerTurnConfirmEnd')) {
+				return;
+			}
+
+			this.ajaxcall(
+				'/thrive/thrive/playerTurnConfirmEnd.html',
+				{},
+				this,
+				function (result) {
+					console.log(result);
+					console.log('onPlayerTurnConfirmEnd was successful.');
+				},
+				function (is_error) {
+					console.log(is_error);
+					console.log('onPlayerTurnConfirmEnd was unsuccessful.');
+				}
+			)
+		},
 
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications
